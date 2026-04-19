@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public final class LeagueRankingApp {
+    // Utility-style class; no instances required.
     private LeagueRankingApp() {
     }
 
@@ -21,6 +22,7 @@ public final class LeagueRankingApp {
 
     static int run(String[] args, LeagueTableCalculator calculator) {
         try {
+            // Keep I/O concerns in the app layer; calculator stays pure and testable.
             List<String> lines = readInputLines(args);
             List<StandingRow> standings = calculator.calculate(lines);
             standings.stream()
@@ -28,6 +30,7 @@ public final class LeagueRankingApp {
                 .forEach(System.out::println);
             return 0;
         } catch (IllegalArgumentException e) {
+            // Usage/validation failures are distinct from I/O failures for scripting ergonomics.
             System.err.println("Error: " + e.getMessage());
             return 2;
         } catch (IOException e) {
@@ -42,10 +45,12 @@ public final class LeagueRankingApp {
         }
 
         if (args.length == 1) {
+            // Path.of keeps separators platform-neutral (Windows/Linux/macOS).
             Path filePath = Path.of(args[0]);
             return Files.readAllLines(filePath);
         }
 
+        // No file provided: read newline-delimited matches from stdin.
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             return reader.lines().collect(Collectors.toList());
         }
