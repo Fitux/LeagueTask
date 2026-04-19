@@ -1,0 +1,16 @@
+target/
+
+# Maven wrapper jar (optional to keep, usually committed only with wrapper setup)
+.mvn/wrapper/maven-wrapper.jar
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

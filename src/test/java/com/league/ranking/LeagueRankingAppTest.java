@@ -38,13 +38,13 @@ class LeagueRankingAppTest {
 
         int code = LeagueRankingApp.run(new String[0], new LeagueTableCalculator());
 
-        String output = stdout.toString(StandardCharsets.UTF_8).trim();
+        String output = normalizeNewlines(stdout.toString(StandardCharsets.UTF_8).trim());
         assertEquals(0, code);
-        assertEquals(String.join("\n",
+        assertEquals(normalizeNewlines(String.join("\n",
             "1. Lions, 2 pts",
             "2. FC Awesome, 1 pt",
             "2. Snakes, 1 pt"
-        ), output);
+        )), output);
     }
 
     @Test
@@ -60,13 +60,13 @@ class LeagueRankingAppTest {
 
         int code = LeagueRankingApp.run(new String[]{tempFile.toString()}, new LeagueTableCalculator());
 
-        String output = stdout.toString(StandardCharsets.UTF_8).trim();
+        String output = normalizeNewlines(stdout.toString(StandardCharsets.UTF_8).trim());
         assertEquals(0, code);
-        assertEquals(String.join("\n",
+        assertEquals(normalizeNewlines(String.join("\n",
             "1. Tarantulas, 3 pts",
             "2. FC Awesome, 1 pt",
             "2. Lions, 1 pt"
-        ), output);
+        )), output);
     }
 
     @Test
@@ -117,5 +117,9 @@ class LeagueRankingAppTest {
         String output = stdout.toString(StandardCharsets.UTF_8).trim();
         assertEquals(0, code);
         assertEquals("", output);
+    }
+
+    private static String normalizeNewlines(String value) {
+        return value.replace("\r\n", "\n");
     }
 }

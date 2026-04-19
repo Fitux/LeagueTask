@@ -1,0 +1,3 @@
+Bears 1, Hawks 0
+Hawks 2, Cobras 2
+Cobras 3, Bears 1

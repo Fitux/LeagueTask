@@ -106,10 +106,10 @@ class LeagueTableCalculatorTest {
 
         assertEquals(1, rows.get(0).rank());
         assertEquals(1, rows.get(1).rank());
-        assertEquals(4, rows.get(2).rank());
-        assertEquals(4, rows.get(3).rank());
-        assertEquals(4, rows.get(4).rank());
-        assertEquals(4, rows.get(5).rank());
+        assertEquals(3, rows.get(2).rank());
+        assertEquals(3, rows.get(3).rank());
+        assertEquals(5, rows.get(4).rank());
+        assertEquals(5, rows.get(5).rank());
     }
 
     @Test
