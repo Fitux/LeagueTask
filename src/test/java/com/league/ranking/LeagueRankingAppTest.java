@@ -81,4 +81,41 @@ class LeagueRankingAppTest {
         assertEquals(2, code);
         assertTrue(error.contains("Error: Invalid match format"));
     }
+
+    @Test
+    void returnsUsageErrorWhenTooManyArgumentsProvided() {
+        ByteArrayOutputStream stderr = new ByteArrayOutputStream();
+        System.setErr(new PrintStream(stderr, true, StandardCharsets.UTF_8));
+
+        int code = LeagueRankingApp.run(new String[]{"a.txt", "b.txt"}, new LeagueTableCalculator());
+
+        String error = stderr.toString(StandardCharsets.UTF_8);
+        assertEquals(2, code);
+        assertTrue(error.contains("Usage: league-ranking [optional-input-file]"));
+    }
+
+    @Test
+    void returnsIoErrorWhenInputFileDoesNotExist() {
+        ByteArrayOutputStream stderr = new ByteArrayOutputStream();
+        System.setErr(new PrintStream(stderr, true, StandardCharsets.UTF_8));
+
+        int code = LeagueRankingApp.run(new String[]{"this-file-does-not-exist.txt"}, new LeagueTableCalculator());
+
+        String error = stderr.toString(StandardCharsets.UTF_8);
+        assertEquals(1, code);
+        assertTrue(error.contains("I/O error:"));
+    }
+
+    @Test
+    void printsNothingAndSucceedsForEmptyStdin() {
+        ByteArrayOutputStream stdout = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(stdout, true, StandardCharsets.UTF_8));
+        System.setIn(new ByteArrayInputStream(new byte[0]));
+
+        int code = LeagueRankingApp.run(new String[0], new LeagueTableCalculator());
+
+        String output = stdout.toString(StandardCharsets.UTF_8).trim();
+        assertEquals(0, code);
+        assertEquals("", output);
+    }
 }

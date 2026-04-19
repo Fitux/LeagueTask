@@ -40,4 +40,36 @@ class MatchParserTest {
 
         assertEquals(true, exception.getMessage().startsWith("A team cannot play against itself:"));
     }
+
+    @Test
+    void rejectsNullInputLine() {
+        IllegalArgumentException exception =
+            assertThrows(IllegalArgumentException.class, () -> parser.parse(null));
+
+        assertEquals("Input line cannot be null.", exception.getMessage());
+    }
+
+    @Test
+    void rejectsBlankInputLine() {
+        IllegalArgumentException exception =
+            assertThrows(IllegalArgumentException.class, () -> parser.parse("   "));
+
+        assertEquals(true, exception.getMessage().startsWith("Invalid match format:"));
+    }
+
+    @Test
+    void rejectsNegativeScores() {
+        IllegalArgumentException exception =
+            assertThrows(IllegalArgumentException.class, () -> parser.parse("Lions -1, Snakes 2"));
+
+        assertEquals(true, exception.getMessage().startsWith("Invalid match format:"));
+    }
+
+    @Test
+    void rejectsNonNumericScores() {
+        IllegalArgumentException exception =
+            assertThrows(IllegalArgumentException.class, () -> parser.parse("Lions x, Snakes 2"));
+
+        assertEquals(true, exception.getMessage().startsWith("Invalid match format:"));
+    }
 }

@@ -64,4 +64,78 @@ class LeagueTableCalculatorTest {
         assertEquals(3, rows.get(2).rank());
         assertEquals(3, rows.get(3).rank());
     }
+
+    @Test
+    void returnsEmptyStandingsForEmptyInput() {
+        List<StandingRow> rows = calculator.calculate(List.of());
+        assertEquals(0, rows.size());
+    }
+
+    @Test
+    void ignoresBlankLinesBetweenMatches() {
+        List<String> inputWithBlanks = List.of(
+            "Lions 1, Snakes 0",
+            "",
+            "   ",
+            "FC Awesome 2, Tarantulas 2"
+        );
+        List<String> inputWithoutBlanks = List.of(
+            "Lions 1, Snakes 0",
+            "FC Awesome 2, Tarantulas 2"
+        );
+
+        List<String> withBlanks = calculator.calculate(inputWithBlanks).stream()
+            .map(StandingRow::format)
+            .toList();
+        List<String> withoutBlanks = calculator.calculate(inputWithoutBlanks).stream()
+            .map(StandingRow::format)
+            .toList();
+
+        assertEquals(withoutBlanks, withBlanks);
+    }
+
+    @Test
+    void assignsCompetitionRanksForLargeTieGroups() {
+        List<String> input = List.of(
+            "A 2, B 0",
+            "C 1, D 0",
+            "E 0, F 0"
+        );
+
+        List<StandingRow> rows = calculator.calculate(input);
+
+        assertEquals(1, rows.get(0).rank());
+        assertEquals(1, rows.get(1).rank());
+        assertEquals(4, rows.get(2).rank());
+        assertEquals(4, rows.get(3).rank());
+        assertEquals(4, rows.get(4).rank());
+        assertEquals(4, rows.get(5).rank());
+    }
+
+    @Test
+    void producesSameStandingsRegardlessOfInputOrder() {
+        List<String> ordered = List.of(
+            "Lions 3, Snakes 3",
+            "Tarantulas 1, FC Awesome 0",
+            "Lions 1, FC Awesome 1",
+            "Tarantulas 3, Snakes 1",
+            "Lions 4, Grouches 0"
+        );
+        List<String> reordered = List.of(
+            "Lions 4, Grouches 0",
+            "Tarantulas 3, Snakes 1",
+            "Lions 1, FC Awesome 1",
+            "Tarantulas 1, FC Awesome 0",
+            "Lions 3, Snakes 3"
+        );
+
+        List<String> orderedOutput = calculator.calculate(ordered).stream()
+            .map(StandingRow::format)
+            .toList();
+        List<String> reorderedOutput = calculator.calculate(reordered).stream()
+            .map(StandingRow::format)
+            .toList();
+
+        assertEquals(orderedOutput, reorderedOutput);
+    }
 }
