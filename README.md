@@ -48,8 +48,24 @@ GitHub Actions runs tests on every push and pull request to `main`:
 
 ### From stdin
 
+#### Bash / Zsh
+
 ```bash
 printf "Lions 3, Snakes 3\nTarantulas 1, FC Awesome 0\nLions 1, FC Awesome 1\nTarantulas 3, Snakes 1\nLions 4, Grouches 0\n" | mvn -q exec:java
+```
+
+#### PowerShell
+
+```powershell
+$inputData = @"
+Lions 3, Snakes 3
+Tarantulas 1, FC Awesome 0
+Lions 1, FC Awesome 1
+Tarantulas 3, Snakes 1
+Lions 4, Grouches 0
+"@
+
+$inputData | mvn -q exec:java
 ```
 
 ### From a file argument
